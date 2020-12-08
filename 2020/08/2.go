@@ -50,16 +50,6 @@ func track(data []Instruction, acc int, executed map[int]bool, idx int, tweaked 
   return 0
 }
 
-func dupMap(original map[int]bool) map[int]bool {
-  // Create the target map
-  target := map[int]bool{}
-  // Copy from the original map to the target map
-  for key, value := range original {
-    target[key] = value
-  }
-  return target;
-}
-
 func prepareData(lines []string) ([]Instruction) {
   var prepared []Instruction
   for _, line := range lines {
