@@ -16,7 +16,6 @@ def solution(data, preamble):
             contiguous.pop(0)
             span -= 1
 
-
 def invalid_number(data, preamble):
     sums = []
     for i, a in enumerate(data[:preamble]):
