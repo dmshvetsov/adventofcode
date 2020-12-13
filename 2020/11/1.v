@@ -75,18 +75,18 @@ fn count_occupied(data [][]string) int {
  */
 
 fn prepare_input(lines []string) [][]string {
-  mut splitted := [][]string{}
-  for line in lines {
-    splitted << line.split('')
-  }
-  return splitted
+	mut splitted := [][]string{}
+	for line in lines {
+		splitted << line.split('')
+	}
+	return splitted
 }
 
 fn read_input(file_path string) []string {
-  content := os.read_lines(file_path) or {
-    return []string{}
-  }
-  return content
+	content := os.read_lines(file_path) or {
+		return []string{}
+	}
+	return content
 }
 
 fn pp(data [][]string) {
