@@ -4,11 +4,12 @@ Unfamiliar languages used:
 * Python
 * Go
 * V
-* Rust (considering)
+* Rust
 * Erlang (considering)
 * Elixir
 * Clojure (considering)
-* Lua (considering)
+* Scala (considering)
+* Lua
 * Dart (considering)
 * R (considering)
 * C++ (considering)
@@ -17,4 +18,4 @@ Known languages used:
 * JavaScript
 * TypeScript
 * Ruby (considering)
-* SQL (considering)
+* SQL (day16)

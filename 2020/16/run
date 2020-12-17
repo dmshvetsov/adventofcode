@@ -1,0 +1,36 @@
+#! /usr/bin/env bash
+
+set -e
+
+if [ -z "$1" ]
+  then
+    echo "Provide sql file name to run as the first argument"
+    exit
+fi
+# Note you need to create adventofcode database first
+
+PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost \
+  -q \
+  -U postgres \
+  -d adventofcode \
+  -f example_input_part1.sql
+
+echo Example
+PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost \
+  -q \
+  -U postgres \
+  -d adventofcode \
+  -f $1
+
+PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost \
+  -q \
+  -U postgres \
+  -d adventofcode \
+  -f input.sql
+
+echo Solution
+PGPASSWORD=$POSTGRES_PASSWORD psql -h localhost \
+  -q \
+  -U postgres \
+  -d adventofcode \
+  -f $1
