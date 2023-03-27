@@ -6,7 +6,7 @@ I did Advent of Code 2022 in a not competitive way by solving puzzles after the 
 
 ## Usage
 
-Intall [cargo-play](https://github.com/fanzeyi/cargo-play).
+Install [cargo-play](https://github.com/fanzeyi/cargo-play).
 
 Run a solution with `cargo play` command:
 
