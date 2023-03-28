@@ -28,3 +28,44 @@ This strategy guide predicts and recommends the following:
 - In this example, if you were to follow the strategy guide, you would get a total score of 15 (8 + 1 + 6).
 
 **What would your total score be if everything goes exactly according to your strategy guide?**
+
+## Clever solution
+
+```python
+f = lambda x: ('  BXCYAZAXBYCZCXAYBZ'.index(x[0]+x[2]),
+               '  BXCXAXAYBYCYCZAZBZ'.index(x[0]+x[2]))
+
+print(*[sum(x)//2 for x in zip(*map(f, open('in.txt')))])
+```
+
+every combination yields a unique score: losing with Rock is 1 point, ..
+
+similar
+
+```python
+with open(filename) as f: data = f.read().replace(' ','').splitlines()
+p1 = ['','BX','CY','AZ','AX','BY','CZ','CX','AY','BZ']
+p2 = ['','BX','CX','AX','AY','BY','CY','CZ','AZ','BZ']
+print(f'part1: {sum(map(p1.index,data))} part2: {sum(map(p2.index,data))}')
+```
+
+[source](https://www.reddit.com/r/adventofcode/comments/zac2v2/comment/iylda9n/?utm_source=share&utm_medium=web2x&context=3)
+
+or
+
+```rust
+fn main() -> Result<()> {
+    let input = parse("inputs/d02.txt")?;
+
+    let mut part1 = 0;
+    let mut part2 = 0;
+
+    for (a, b) in input {
+        part1 += (2 - (a - b + 1).rem_euclid(3)) * 3 + b + 1;
+        part2 += b * 3 + (a + b - 1).rem_euclid(3) + 1;
+    }
+
+    Ok(())
+}
+```
+[source](https://www.reddit.com/r/adventofcode/comments/zac2v2/comment/iyliutl/?utm_source=share&utm_medium=web2x&context=3)
