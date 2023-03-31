@@ -31,9 +31,9 @@ fn to_priority(item: Option<char>) -> i32 {
             if diff < 0 {
                 diff + 58
             } else {
-                diff 
+                diff
             }
-        },
+        }
         None => 0,
     }
 }
@@ -49,11 +49,11 @@ fn solution(reader: BufReader<File>) -> i32 {
                     break;
                 }
                 sum += to_priority(find_char_in_grop(lines));
-            },
+            }
             Err(e) => {
                 eprintln!("error reading lines from the file: {}", e);
                 std::process::exit(1);
-            },
+            }
         }
     }
     sum
