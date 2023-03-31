@@ -65,3 +65,176 @@ In the first group, the only item type that appears in all three rucksacks is lo
 Priorities for these items must still be found to organize the sticker attachment efforts: here, they are 18 (r) for the first group and 52 (Z) for the second group. The sum of these is 70.
 
 Find the item type that corresponds to the badges of each three-Elf group. What is the sum of the priorities of those item types?
+
+## Other's solutions
+
+```python
+def part_1(data):
+    result = 0
+    for line in data:
+        a, b = line[:len(line)//2], line[len(line)//2:]
+        same = (set(a) & set(b)).pop()
+        result += ascii_letters.index(same) + 1
+    return result
+
+
+def part_2(data):
+    result = 0
+    for i in range(0, len(data), 3):
+        a, b, c = data[i:i+3]
+        same = (set(a) & set(b) & set(c)).pop()
+        result += ascii_letters.index(same) + 1
+    return result
+```
+
+or 
+
+```python
+lines = open("inputs/3.txt").read().strip().split("\n")
+
+def getVal(x):
+    return ord(x) - ord('a') + 1 if x.islower() else ord(x) - ord('A') + 27
+
+p1 = 0
+for line in lines:
+    m = len(line) // 2
+    x, = set(line[:m]) & set(line[m:])
+    p1 += getVal(x)
+
+p2 = 0
+for i in range(0, len(lines), 3):
+    line1, line2, line3 = lines[i:i+3]
+    x, = set(line1) & set(line2) & set(line3)
+    p2 += getVal(x)
+print("Part1", p1)
+print("Part2", p2)
+```
+
+Some inspiring Rust solutions:
+
+```Rust
+// part 1
+pub fn main() {
+    println!(
+        "{}",
+        include_bytes!("../input.txt")
+            .split(|b| *b == b'\n')
+            .map(|l| l.split_at(l.len() / 2))
+            .map(|(a, b)| b
+                .iter()
+                .filter(|b| a.contains(b))
+                .map(|b| if *b >= b'a' {
+                    (b - b'a') as i16 + 1
+                } else {
+                    (b - b'A') as i16 + 27
+                })
+                .next()
+                .unwrap())
+            .sum::<i16>(),
+    );
+}
+
+// part 2
+pub fn main() {
+    println!(
+        "{}",
+        include_bytes!("../input.txt")
+            .split(|b| *b == b'\n')
+            .collect::<Vec<_>>()
+            .chunks(3)
+            .map(|set| set[0]
+                .iter()
+                .find(|b| set[1].contains(b) && set[2].contains(b))
+                .unwrap())
+            .map(|b| if *b >= b'a' {
+                (b - b'a') as i16 + 1
+            } else {
+                (b - b'A') as i16 + 27
+            })
+            .sum::<i16>(),
+    );
+}
+```
+
+similar
+
+```Rust
+use itertools::Itertools;
+
+fn value(c: u8) -> usize {
+  match c {
+    b'a'..=b'z' => c as usize - b'a' as usize + 1,
+    b'A'..=b'Z' => c as usize - b'A' as usize + 27,
+    _ => unreachable!(),
+  }
+}
+
+fn same_chars(a: &[u8], b: &[u8]) -> Vec<u8> {
+  a.iter().copied().filter(|c| b.contains(c)).collect()
+}
+
+#[aoc::main(03)]
+fn main(input: &str) -> (usize, usize) {
+  let lines = input.lines().map(str::as_bytes).collect::<Vec<_>>();
+  let p1 = lines.iter()
+    .map(|l| same_chars(&l[..l.len()/2], &l[l.len()/2..]))
+    .map(|c| value(c[0]))
+    .sum();
+  let p2 = lines.iter()
+    .tuples()
+    .map(|(a,b,c)| same_chars(a, &same_chars(b, c)))
+    .map(|c| value(c[0]))
+    .sum();
+  (p1, p2)
+}
+```
+
+another one
+
+```Rust
+use itertools::Itertools;
+
+fn compartment_to_bitmap(compartment: &str) -> u64 {
+    compartment.chars().fold(0, |a, char| {
+        a | (1
+            << match char {
+                'a'..='z' => char as u64 - 97,
+                'A'..='Z' => char as u64 - 39,
+                _ => unreachable!(),
+            })
+    })
+}
+
+fn main() {
+    let input = include_str!("input.txt");
+
+    let rucksacks: Vec<_> = input.lines().collect();
+
+    let mut priority_sum = 0;
+
+    for (compartment_a, compartment_b) in rucksacks.iter().map(|n| n.split_at(n.len() / 2)) {
+        let compartment_a = compartment_to_bitmap(compartment_a);
+        let compartment_b = compartment_to_bitmap(compartment_b);
+
+        let duplicate = ((compartment_a & compartment_b) as f64).log2() as u64;
+
+        priority_sum += duplicate + 1;
+    }
+
+    println!("Day 1: {priority_sum}");
+
+    let mut priority_sum_2 = 0;
+
+    for (rucksack_a, rucksack_b, rucksack_c) in rucksacks.iter().tuples() {
+        let rucksack_a = compartment_to_bitmap(rucksack_a);
+        let rucksack_b = compartment_to_bitmap(rucksack_b);
+        let rucksack_c = compartment_to_bitmap(rucksack_c);
+
+        let duplicate = ((rucksack_a & rucksack_b & rucksack_c) as f64).log2() as u64;
+
+        priority_sum_2 += duplicate + 1;
+    }
+
+    println!("Day 2: {priority_sum_2}");
+}
+```
