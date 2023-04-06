@@ -45,3 +45,26 @@ Here are the first positions of start-of-message markers for all of the above ex
 - zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 26
 
 **How many characters need to be processed before the first start-of-message marker is detected?**
+
+## Other solutions
+
+There's a neat trick here that lets you solve this problem without an inner loop or accumulating into a hashmap:
+
+If you convert each character to a bitmask (i.e. 1 << (c - 'a')), you can do a single pass through the string, accumulating with xor and terminating when you've hit N set bits.
+
+The core looks like this:
+
+```Rust
+let mut accum = 0u32;
+for (i, mask) in masks.iter().enumerate() {
+    accum ^= mask;
+    if i >= size {
+        accum ^= masks[i - size];
+        if accum.count_ones() as usize == size {
+            return Ok(i + 1);
+        }
+    }
+}
+```
+
+[source](https://www.reddit.com/r/adventofcode/comments/zdw0u6/comment/iz4l6xk/?utm_source=share&utm_medium=web2x&context=3)
